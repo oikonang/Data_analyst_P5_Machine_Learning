@@ -15,6 +15,8 @@
     
 """
 
+#import division in order to show 0.33 when dividing 1/3
+from __future__ import division
 import pickle
 
 enron_data = pickle.load(open("../final_project/final_project_dataset.pkl", "r"))
@@ -59,6 +61,23 @@ def no_of_emails():
 			count = count + 1
 	return count
 
+def no_of_total_payments():
+	count_nan = 0
+	count_p = 0
+	for p in enron_data:
+		count_p = count_p + 1
+		if enron_data[p]['total_payments'] == 'NaN':
+			count_nan = count_nan + 1
+	return count_nan, count_nan/count_p
+
+def no_of_pois_total_payments():
+	count_nan = 0
+	count_p = 0
+	for p in enron_data:
+		count_p = count_p + 1
+		if enron_data[p]['total_payments'] == 'NaN' and enron_data[p]['poi'] == True:
+			count_nan = count_nan + 1
+	return count_nan, count_nan/count_p
 
 print "No. of persons: %d" % len(keys)
 print "No. of variables for each person: %d" % len(features_dict[0])
@@ -74,3 +93,5 @@ print "Total payments of Andrew Fastow: ", enron_data['FASTOW ANDREW S']['total_
 print "Max total payments person between the top 3 executives: ", max_total_payments_person()
 print "No. of persons that have a quantified salary:", no_of_salaries()
 print "No. of persons that have known emails:", no_of_emails()
+print "No. of persons that don't have total_payments and their percentage: ", no_of_total_payments()
+print "No. of pois that don't have total_payments and their percentage: ", no_of_pois_total_payments()
