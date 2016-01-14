@@ -5,8 +5,8 @@
 """
 
 
-
-
+import numpy as np
+from sklearn.cluster import KMeans
 import pickle
 import numpy
 import matplotlib.pyplot as plt
@@ -43,11 +43,31 @@ data_dict = pickle.load( open("../final_project/final_project_dataset.pkl", "r")
 ### there's an outlier--remove it! 
 data_dict.pop("TOTAL", 0)
 
+###ignore NaNs and find max and min value for "exercised_stock_options"
+lista = []
+for name in data_dict:
+    lista.append(data_dict[name]["exercised_stock_options"])
+lista = filter(lambda a: a!='NaN' , lista)
+
+print "max exercised_stock_options: ", max(lista)
+print "min exercised_stock_options: ", min(lista)
+
+###ignore NaNs and find max and min value for "salary"
+listb = []
+for name in data_dict:
+    listb.append(data_dict[name]["salary"])
+listb = filter(lambda a: a!='NaN' , listb)
+
+print "max salary: ", max(listb)
+print "min salary: ", min(listb)
+
+
 
 ### the input features we want to use 
 ### can be any key in the person-level dictionary (salary, director_fees, etc.) 
 feature_1 = "salary"
 feature_2 = "exercised_stock_options"
+#feature_3 = "total_payments"
 poi  = "poi"
 features_list = [poi, feature_1, feature_2]
 data = featureFormat(data_dict, features_list )
@@ -64,6 +84,9 @@ plt.show()
 
 ### cluster here; create predictions of the cluster labels
 ### for the data and store them to a list called pred
+reg = KMeans(n_clusters = 2, n_init = 5, max_iter = 300)
+pred = reg.fit_predict( finance_features )
+
 
 
 
