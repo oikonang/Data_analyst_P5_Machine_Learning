@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 import sys
 sys.path.append("../tools/")
 from feature_format import featureFormat, targetFeatureSplit
-
+from sklearn.preprocessing import MinMaxScaler
 
 
 
@@ -48,9 +48,15 @@ lista = []
 for name in data_dict:
     lista.append(data_dict[name]["exercised_stock_options"])
 lista = filter(lambda a: a!='NaN' , lista)
-
 print "max exercised_stock_options: ", max(lista)
 print "min exercised_stock_options: ", min(lista)
+#put a new value just to test if rescaling works
+lista.append(float(1000000.0))
+#create scaler for rescaling
+scalera = MinMaxScaler()
+rescaled_data_eso = scalera.fit_transform(lista)
+print "rescaled exercised_stock_options for 1000000: ", rescaled_data_eso[-1]
+
 
 ###ignore NaNs and find max and min value for "salary"
 listb = []
@@ -60,6 +66,12 @@ listb = filter(lambda a: a!='NaN' , listb)
 
 print "max salary: ", max(listb)
 print "min salary: ", min(listb)
+#put a new value just to test if rescaling works
+listb.append(float(200000.0))
+#create scaler for rescaling
+scalerb = MinMaxScaler()
+rescaled_data_salary = scalerb.fit_transform(listb)
+print "rescaled salary for 200000: ", rescaled_data_salary[-1]
 
 
 
@@ -81,6 +93,8 @@ poi, finance_features = targetFeatureSplit( data )
 for f1, f2 in finance_features:
     plt.scatter( f1, f2 )
 plt.show()
+
+#create a scaling feature algorithm
 
 ### cluster here; create predictions of the cluster labels
 ### for the data and store them to a list called pred
