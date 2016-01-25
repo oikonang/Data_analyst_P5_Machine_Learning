@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 from nltk.stem.snowball import SnowballStemmer
+from sklearn.feature_extraction.text import CountVectorizer
 import string
 
 def parseOutText(f):
@@ -19,9 +20,10 @@ def parseOutText(f):
 
     f.seek(0)  ### go back to beginning of file (annoying)
     all_text = f.read()
-
+    
     ### split off metadata
     content = all_text.split("X-FileName:")
+    
     words = ""
     if len(content) > 1:
         ### remove punctuation
@@ -29,6 +31,15 @@ def parseOutText(f):
 
         ### project part 2: comment out the line below
         words = text_string
+ #       words = text_string.split()
+    words = text_string.strip().split()
+    stemmer = SnowballStemmer("english")
+ 
+    all_words = ""
+    for word in words:
+        stemmed_word = stemmer.stem(word)
+        all_words += (stemmed_word + " ")
+            
 
         ### split the text string into individual words, stem each word,
         ### and append the stemmed word to words (make sure there's a single
@@ -38,7 +49,7 @@ def parseOutText(f):
 
 
 
-    return words
+    return all_words
 
     
 
